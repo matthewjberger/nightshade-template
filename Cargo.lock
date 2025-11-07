@@ -1759,9 +1759,9 @@ dependencies = [
 
 [[package]]
 name = "nightshade"
-version = "0.1.2"
+version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "01cfb8c7a1340b43ef4360e0d8e90ec9c81ddbc16927d884b73f30aa650dafc7"
+checksum = "0fcdf92c81758abcbfb7c83d2354d2a6a447d11e589c0e12f6f193fec165d3bc"
 dependencies = [
  "bitflags 2.10.0",
  "bytemuck",
