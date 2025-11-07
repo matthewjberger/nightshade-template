@@ -1,4 +1,4 @@
-# Nightshade
+# Nightshade Template
 
 A template for creating applications with the [Nightshade](https://github.com/matthewjberger/nightshade) game engine.
 
