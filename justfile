@@ -65,3 +65,12 @@ udeps:
 # Watches for changes and runs the app
 watch:
     cargo watch -x 'run -r'
+
+# Builds the project for Steam Deck using cross
+build-steamdeck:
+    cross build --release --target x86_64-unknown-linux-gnu
+
+# Builds and deploys the project to Steam Deck
+deploy-steamdeck:
+    just build-steamdeck
+    scp ./target/x86_64-unknown-linux-gnu/release/nightshade-template deck@steamdeck.local:~/Downloads
