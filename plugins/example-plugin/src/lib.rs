@@ -1,6 +1,9 @@
-use nightshade::plugin::{drain_engine_events, log, spawn_cube, spawn_sphere, EngineEvent};
+#[cfg(target_arch = "wasm32")]
+use nightshade::plugin::{EngineEvent, drain_engine_events, log, spawn_cube, spawn_sphere};
+#[cfg(target_arch = "wasm32")]
 use std::cell::RefCell;
 
+#[cfg(target_arch = "wasm32")]
 struct GameState {
     initialized: bool,
     spawn_timer: f32,
@@ -9,6 +12,7 @@ struct GameState {
     frame_count: u64,
 }
 
+#[cfg(target_arch = "wasm32")]
 impl Default for GameState {
     fn default() -> Self {
         Self {
@@ -21,10 +25,12 @@ impl Default for GameState {
     }
 }
 
+#[cfg(target_arch = "wasm32")]
 thread_local! {
     static STATE: RefCell<GameState> = RefCell::new(GameState::default());
 }
 
+#[cfg(target_arch = "wasm32")]
 fn with_state<F, R>(f: F) -> R
 where
     F: FnOnce(&mut GameState) -> R,
@@ -32,6 +38,7 @@ where
     STATE.with_borrow_mut(f)
 }
 
+#[cfg(target_arch = "wasm32")]
 #[unsafe(no_mangle)]
 pub extern "C" fn on_init() {
     with_state(|state| {
@@ -50,6 +57,7 @@ pub extern "C" fn on_init() {
     });
 }
 
+#[cfg(target_arch = "wasm32")]
 #[unsafe(no_mangle)]
 pub extern "C" fn on_frame() {
     for event in drain_engine_events() {
