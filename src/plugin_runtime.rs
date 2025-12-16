@@ -1,26 +1,26 @@
 use anyhow::Result;
-use nightshade::ecs::prefab::{import_gltf_from_path, spawn_prefab, GltfLoadResult};
+use nightshade::ecs::prefab::{GltfLoadResult, import_gltf_from_path, spawn_prefab};
 use nightshade::plugin::{EngineCommand, EngineEvent, Primitive};
 use nightshade::prelude::*;
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
-use std::sync::mpsc::{channel, Receiver, Sender};
+use std::sync::mpsc::{Receiver, Sender, channel};
 use wasmtime::*;
 
 enum AsyncResult {
-    FileLoaded {
+    File {
         plugin_id: u64,
         request_id: u64,
         result: std::io::Result<Vec<u8>>,
     },
-    TextureLoaded {
+    Texture {
         plugin_id: u64,
         request_id: u64,
         texture_name: String,
         texture_id: u64,
         result: Result<(Vec<u8>, u32, u32), String>,
     },
-    PrefabLoaded {
+    Prefab {
         plugin_id: u64,
         request_id: u64,
         position: Vec3,
@@ -406,7 +406,7 @@ impl PluginRuntime {
     fn process_async_results(&mut self, world: &mut World) {
         while let Ok(result) = self.async_receiver.try_recv() {
             match result {
-                AsyncResult::FileLoaded {
+                AsyncResult::File {
                     plugin_id,
                     request_id,
                     result,
@@ -420,7 +420,7 @@ impl PluginRuntime {
                     };
                     self.dispatch_event_to_plugin(plugin_id, &event);
                 }
-                AsyncResult::TextureLoaded {
+                AsyncResult::Texture {
                     plugin_id,
                     request_id,
                     texture_name,
@@ -446,7 +446,7 @@ impl PluginRuntime {
                         self.dispatch_event_to_plugin(plugin_id, &event);
                     }
                 },
-                AsyncResult::PrefabLoaded {
+                AsyncResult::Prefab {
                     plugin_id,
                     request_id,
                     position,
@@ -681,7 +681,7 @@ impl PluginRuntime {
                         let sender = self.async_sender.clone();
                         std::thread::spawn(move || {
                             let result = std::fs::read(&safe_path);
-                            let _ = sender.send(AsyncResult::FileLoaded {
+                            let _ = sender.send(AsyncResult::File {
                                 plugin_id,
                                 request_id,
                                 result,
@@ -713,7 +713,7 @@ impl PluginRuntime {
                                             (rgba.into_raw(), width, height)
                                         })
                                 });
-                            let _ = sender.send(AsyncResult::TextureLoaded {
+                            let _ = sender.send(AsyncResult::Texture {
                                 plugin_id,
                                 request_id,
                                 texture_name,
@@ -747,7 +747,7 @@ impl PluginRuntime {
                         std::thread::spawn(move || {
                             let result =
                                 import_gltf_from_path(&safe_path).map_err(|e| e.to_string());
-                            let _ = sender.send(AsyncResult::PrefabLoaded {
+                            let _ = sender.send(AsyncResult::Prefab {
                                 plugin_id,
                                 request_id,
                                 position,
