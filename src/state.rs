@@ -33,10 +33,6 @@ impl State for Template {
         world.resources.active_camera = Some(camera_entity);
     }
 
-    fn ui(&mut self, _world: &mut World, ui_context: &egui::Context) {
-        egui::Window::new("Template").show(ui_context, |_ui| {});
-    }
-
     fn run_systems(&mut self, world: &mut World) {
         pan_orbit_camera_system(world);
         example::tick(&mut self.template_world, world);
