@@ -33,11 +33,14 @@ impl State for Template {
     fn run_systems(&mut self, world: &mut World) {
         pan_orbit_camera_system(world);
         example::tick(&mut self.template_world, world);
-    }
 
-    fn on_keyboard_input(&mut self, world: &mut World, key_code: KeyCode, key_state: KeyState) {
-        if matches!((key_code, key_state), (KeyCode::KeyQ, KeyState::Pressed)) {
-            world.resources.window.should_exit = true;
+        let events = std::mem::take(&mut world.resources.input.events);
+        for event in events {
+            if let AppEvent::Keyboard { key, state } = event
+                && matches!((key, state), (KeyCode::KeyQ, KeyState::Pressed))
+            {
+                world.resources.window.should_exit = true;
+            }
         }
     }
 }
