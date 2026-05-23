@@ -14,8 +14,8 @@ impl State for Template {
     fn initialize(&mut self, world: &mut World) {
         world.resources.window.title = "Template".to_string();
         world.resources.user_interface.enabled = true;
-        world.resources.graphics.show_grid = true;
-        world.resources.graphics.atmosphere = Atmosphere::Nebula;
+        world.resources.debug_draw.show_grid = true;
+        world.resources.render_settings.atmosphere = Atmosphere::Nebula;
 
         spawn_sun(world);
 
