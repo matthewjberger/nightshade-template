@@ -1,17 +1,19 @@
-use crate::ecs::TemplateWorld;
+use crate::ecs::{GAME, TemplateResources, register_template_components};
 use crate::systems::example;
 use nightshade::prelude::*;
 
-/// The application root. Holds your user-side ECS world (`TemplateWorld`)
-/// and forwards each State trait method to system functions in
-/// `src/systems/`.
+/// The application root. Holds your app resources and forwards each
+/// State trait method to system functions in `src/systems/`.
 #[derive(Default)]
 pub struct Template {
-    pub template_world: TemplateWorld,
+    pub template_resources: TemplateResources,
 }
 
 impl State for Template {
     fn initialize(&mut self, world: &mut World) {
+        let game_world_index = world.ecs.add_world(register_template_components());
+        assert_eq!(game_world_index, GAME);
+
         world.resources.window.title = "Template".to_string();
         world.resources.user_interface.enabled = true;
         world.resources.debug_draw.show_grid = true;
@@ -32,7 +34,7 @@ impl State for Template {
 
     fn run_systems(&mut self, world: &mut World) {
         pan_orbit_camera_system(world);
-        example::tick(&mut self.template_world, world);
+        example::tick(&mut self.template_resources, world);
 
         let events = std::mem::take(&mut world.resources.input.events);
         for event in events {

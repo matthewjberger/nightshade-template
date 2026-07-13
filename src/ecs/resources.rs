@@ -3,4 +3,5 @@
 #[derive(Default)]
 pub struct ExampleState {
     pub frame_count: u64,
+    pub elapsed_seconds: f32,
 }
