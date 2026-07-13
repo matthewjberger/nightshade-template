@@ -11,8 +11,7 @@ pub struct Template {
 
 impl State for Template {
     fn initialize(&mut self, world: &mut World) {
-        let game_world_index = world.ecs.add_world(register_template_components());
-        assert_eq!(game_world_index, GAME);
+        world.ecs.add_world_at(GAME, register_template_components());
 
         world.resources.window.title = "Template".to_string();
         world.resources.user_interface.enabled = true;
