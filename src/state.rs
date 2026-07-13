@@ -1,4 +1,4 @@
-use crate::ecs::{GAME, TemplateResources, register_template_components};
+use crate::ecs::{TemplateResources, register_template_components};
 use crate::systems::example;
 use nightshade::prelude::*;
 
