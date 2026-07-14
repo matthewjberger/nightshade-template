@@ -12,8 +12,8 @@ impl Plugin for TemplatePlugin {
     fn build(&self, app: &mut App) {
         app.world.resources.window.title = "Template".to_string();
         app.insert_resource(TemplateResources::default());
-        app.add_startup_system("template_initialize", initialize);
-        app.add_system(Stage::Update, "template_update", |world| {
+        app.add_startup_system(initialize);
+        app.add_system(Stage::Update, |world| {
             game_scope::<TemplateResources, _>(world, update);
         });
     }
