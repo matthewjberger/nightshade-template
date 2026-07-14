@@ -37,7 +37,6 @@ fn initialize(world: &mut World) {
 }
 
 fn update(template_resources: &mut TemplateResources, world: &mut World) {
-    pan_orbit_camera_system(world);
     example::tick(template_resources, world);
 
     let events = std::mem::take(&mut world.resources.input.events);
