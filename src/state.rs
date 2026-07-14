@@ -13,9 +13,7 @@ impl Plugin for TemplatePlugin {
         app.world.resources.window.title = "Template".to_string();
         app.insert_resource(TemplateResources::default());
         app.add_startup_system(initialize);
-        app.add_system(Stage::Update, |world| {
-            game_scope::<TemplateResources, _>(world, update);
-        });
+        app.add_game_system(Stage::Update, update);
     }
 }
 
