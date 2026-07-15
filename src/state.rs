@@ -10,7 +10,9 @@ pub struct TemplatePlugin;
 
 impl Plugin for TemplatePlugin {
     fn build(&self, app: &mut App) {
-        app.world.resources.window.title = "Template".to_string();
+        app.world
+            .expect_resource_mut::<nightshade::ecs::window::resources::Window>()
+            .title = "Template".to_string();
         app.insert_resource(TemplateResources::default());
         app.add_system(Stage::Startup, initialize);
         app.add_system(Stage::Update, update);
@@ -20,8 +22,12 @@ impl Plugin for TemplatePlugin {
 fn initialize(world: &mut World) {
     world.ecs.add_world_at(GAME, register_template_components());
 
-    world.resources.debug_draw.show_grid = true;
-    world.resources.render_settings.atmosphere = Atmosphere::Nebula;
+    world
+        .expect_resource_mut::<nightshade::render::config::DebugDraw>()
+        .show_grid = true;
+    world
+        .expect_resource_mut::<nightshade::render::config::RenderSettings>()
+        .atmosphere = Atmosphere::Nebula;
 
     spawn_sun(world);
 
@@ -39,12 +45,18 @@ fn initialize(world: &mut World) {
 fn update(template_resources: &mut TemplateResources, world: &mut World) {
     example::tick(template_resources, world);
 
-    let events = std::mem::take(&mut world.resources.input.events);
+    let events = std::mem::take(
+        &mut world
+            .expect_resource_mut::<nightshade::ecs::input::resources::Input>()
+            .events,
+    );
     for event in events {
         if let AppEvent::Keyboard { key, state } = event
             && matches!((key, state), (KeyCode::KeyQ, KeyState::Pressed))
         {
-            world.resources.window.should_exit = true;
+            world
+                .expect_resource_mut::<nightshade::ecs::window::resources::Window>()
+                .should_exit = true;
         }
     }
 }
