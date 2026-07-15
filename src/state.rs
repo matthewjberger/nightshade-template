@@ -39,7 +39,7 @@ fn initialize(world: &mut World) {
         std::f32::consts::FRAC_PI_4,
         "Main Camera".to_string(),
     );
-    world.resources.active_camera = Some(camera_entity);
+    world.expect_resource_mut::<ActiveCamera>().0 = Some(camera_entity);
 }
 
 fn update(template_resources: &mut TemplateResources, world: &mut World) {
