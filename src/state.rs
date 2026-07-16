@@ -11,7 +11,7 @@ pub struct TemplatePlugin;
 impl Plugin for TemplatePlugin {
     fn build(&self, app: &mut App) {
         app.world
-            .expect_resource::<nightshade::ecs::window::resources::Window>()
+            .res::<nightshade::ecs::window::resources::Window>()
             .title = "Template".to_string();
         app.insert_resource(TemplateResources::default());
         app.add_system(Stage::Startup, initialize);
@@ -23,10 +23,10 @@ fn initialize(world: &mut World) {
     world.ecs.add_world_at(GAME, register_template_components());
 
     world
-        .expect_resource::<nightshade::render::config::DebugDraw>()
+        .res::<nightshade::render::config::DebugDraw>()
         .show_grid = true;
     world
-        .expect_resource::<nightshade::render::config::RenderSettings>()
+        .res::<nightshade::render::config::RenderSettings>()
         .atmosphere = Atmosphere::Nebula;
 
     spawn_sun(world);
@@ -39,7 +39,7 @@ fn initialize(world: &mut World) {
         std::f32::consts::FRAC_PI_4,
         "Main Camera".to_string(),
     );
-    world.expect_resource::<ActiveCamera>().0 = Some(camera_entity);
+    world.res::<ActiveCamera>().0 = Some(camera_entity);
 }
 
 fn update(template_resources: &mut TemplateResources, world: &mut World) {
@@ -47,7 +47,7 @@ fn update(template_resources: &mut TemplateResources, world: &mut World) {
 
     let events = std::mem::take(
         &mut world
-            .expect_resource::<nightshade::ecs::input::resources::Input>()
+            .res::<nightshade::ecs::input::resources::Input>()
             .events,
     );
     for event in events {
@@ -55,7 +55,7 @@ fn update(template_resources: &mut TemplateResources, world: &mut World) {
             && matches!((key, state), (KeyCode::KeyQ, KeyState::Pressed))
         {
             world
-                .expect_resource::<nightshade::ecs::window::resources::Window>()
+                .res::<nightshade::ecs::window::resources::Window>()
                 .should_exit = true;
         }
     }
