@@ -10,9 +10,7 @@ pub struct TemplatePlugin;
 
 impl Plugin for TemplatePlugin {
     fn build(&self, app: &mut App) {
-        app.world
-            .res::<nightshade::ecs::window::resources::Window>()
-            .title = "Template".to_string();
+        app.world.res_mut::<Window>().title = "Template".to_string();
         app.insert_resource(TemplateResources::default());
         app.add_system(Stage::Startup, initialize);
         app.add_system(Stage::Update, update);
@@ -22,12 +20,8 @@ impl Plugin for TemplatePlugin {
 fn initialize(world: &mut World) {
     world.ecs.add_world_at(GAME, register_template_components());
 
-    world
-        .res::<nightshade::render::config::DebugDraw>()
-        .show_grid = true;
-    world
-        .res::<nightshade::render::config::RenderSettings>()
-        .atmosphere = Atmosphere::Nebula;
+    world.res_mut::<DebugDraw>().show_grid = true;
+    world.res_mut::<RenderSettings>().atmosphere = Atmosphere::Nebula;
 
     spawn_sun(world);
 
@@ -39,24 +33,18 @@ fn initialize(world: &mut World) {
         std::f32::consts::FRAC_PI_4,
         "Main Camera".to_string(),
     );
-    world.res::<ActiveCamera>().0 = Some(camera_entity);
+    world.res_mut::<ActiveCamera>().0 = Some(camera_entity);
 }
 
 fn update(template_resources: &mut TemplateResources, world: &mut World) {
     example::tick(template_resources, world);
 
-    let events = std::mem::take(
-        &mut world
-            .res::<nightshade::ecs::input::resources::Input>()
-            .events,
-    );
+    let events = std::mem::take(&mut world.res_mut::<Input>().events);
     for event in events {
         if let AppEvent::Keyboard { key, state } = event
             && matches!((key, state), (KeyCode::KeyQ, KeyState::Pressed))
         {
-            world
-                .res::<nightshade::ecs::window::resources::Window>()
-                .should_exit = true;
+            world.res_mut::<Window>().should_exit = true;
         }
     }
 }
