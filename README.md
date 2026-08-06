@@ -36,9 +36,12 @@ Enable features with `cargo run --features <feature>`:
 | Feature | Description | Docs |
 |---------|-------------|------|
 | `tracing` | File logging to `logs/nightshade.log` | [Profiling](https://github.com/matthewjberger/nightshade/blob/main/docs/PROFILING.md) |
-| `steam` | Steamworks integration | [Steam](https://github.com/matthewjberger/nightshade/blob/main/docs/STEAM.md) |
 
-See also: [Steam Deck Deployment](https://github.com/matthewjberger/nightshade/blob/main/docs/STEAM_DECK.md)
+For Steamworks (achievements, stats, friends, P2P), add the
+[`nightshade-steam`](https://crates.io/crates/nightshade-steam) crate and
+compose its `SteamPlugin`. See
+[Steam](https://github.com/matthewjberger/nightshade/blob/main/docs/STEAM.md)
+and [Steam Deck Deployment](https://github.com/matthewjberger/nightshade/blob/main/docs/STEAM_DECK.md).
 
 ## License
 

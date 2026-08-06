@@ -21,7 +21,6 @@ wasm-bindgen-futures = "0.4"
 
 [features]
 default = ["tracing"]
-steam = ["nightshade/steam"]
 tracing = ["nightshade/tracing"]
 
 [profile.wasm-release]
